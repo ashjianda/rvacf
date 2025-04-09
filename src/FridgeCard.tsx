@@ -24,7 +24,6 @@ const getTempColor = (temp: number) => {
 const FridgeCard = ({ name, image, link, mapUrl, usage, temp, contains = "Fridge & Pantry"}: Props) => {
     return (
         <div className="collection-item-course w-dyn-item">
-            <a href={link} className="div-course-card wider w-inline-block">
                 <img src={image} alt={name} className="image-193" />
                 <div className="div-course-element-name">
                     <div className="paragraph-l">{name}</div>
@@ -41,7 +40,6 @@ const FridgeCard = ({ name, image, link, mapUrl, usage, temp, contains = "Fridge
                         Temperature: {temp}°F
                     </div>
                 </div>
-            </a>
         </div>
     );
 };
