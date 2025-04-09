@@ -24,20 +24,22 @@ const getTempColor = (temp: number) => {
 const FridgeCard = ({ name, image, link, mapUrl, usage, temp, contains = "Fridge & Pantry"}: Props) => {
     return (
         <div className="collection-item-course w-dyn-item">
-            <img src={image} alt={name} className="image-193" />
-            <div className="div-course-element-name">
-                <div className="paragraph-l">{name}</div>
-            </div>
-            <div className="div-course-element-info">
-                <div className="div-chip">{contains}</div>
-                <a href={mapUrl} className="button-5 w-button">Directions</a>
-            </div>
-            <div className="div-course-element-info">
-                <div className="div-chip-usage">
-                    Usage: {usage}
+            <div className="div-course-card wider w-inline-block">
+                <img src={image} alt={name} className="image-193" />
+                <div className="div-course-element-name">
+                    <div className="paragraph-l">{name}</div>
                 </div>
-                <div className={"div-chip-temp"} style={{backgroundColor:getTempColor(temp)}}>
-                    Temperature: {temp}°F
+                <div className="div-course-element-info">
+                    <div className="div-chip">{contains}</div>
+                    <a href={mapUrl} className="button-5 w-button">Directions</a>
+                </div>
+                <div className="div-course-element-info">
+                    <div className="div-chip-usage">
+                        Usage: {usage}
+                    </div>
+                    <div className={"div-chip-temp"} style={{backgroundColor:getTempColor(temp)}}>
+                        Temperature: {temp}°F
+                    </div>
                 </div>
             </div>
         </div>
