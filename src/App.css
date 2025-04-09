@@ -3366,7 +3366,7 @@ blockquote {
 .div-navbar {
   justify-content: space-between;
   align-items: center;
-  width: 80%;
+  width: 100%;
   max-width: 1140px;
   margin: 0 auto;
   padding-left: 10px;
@@ -3780,10 +3780,18 @@ blockquote {
   display: flex;
 }
 
+@media screen and (max-width: 991px) {
+  .fridges-heading-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 .fridges-heading-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .fridges-heading {
@@ -3859,9 +3867,19 @@ blockquote {
   text-align: center;
   letter-spacing: .5px;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 10px;
   font-family: Oswald, sans-serif;
   font-size: 16px;
+}
+
+.loading-text {
+  color: var(--dark-slate-blue);
+  text-align: center;
+  letter-spacing: .5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: Oswald, sans-serif;
+  font-size: 24px;
 }
 
 .div-heading {
@@ -4039,11 +4057,54 @@ blockquote {
 }
 
 .menu {
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  display: flex;
+  gap: 1rem;
 }
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Mobile overrides */
+@media screen and (max-width: 991px) {
+  .menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 150px;
+    background-color: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%); /* hidden off-screen */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .menu.open {
+    transform: translateX(0); /* slide in */
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .div-navbar {
+    position: relative;
+    z-index: 1001; /* above menu */
+  }
+}
+
 
 .ticket-and-close-icon {
   display: none;
@@ -7464,13 +7525,6 @@ blockquote {
     top: 273px;
   }
 
-  .menu {
-    flex-direction: column;
-    align-items: flex-end;
-    margin-right: 20px;
-    display: flex;
-  }
-
   .footer {
     margin-top: 0;
     padding: 10px 0 10px 10px;
@@ -8082,10 +8136,6 @@ blockquote {
 
   .paragraph-s.white, .paragraph-s.white.left-aligned, .paragraph-s.top-margin-10.left-aligned {
     text-align: left;
-  }
-
-  .menu {
-    align-items: flex-start;
   }
 
   .div-row-stats {

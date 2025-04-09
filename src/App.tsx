@@ -101,7 +101,7 @@ const fridges = [
     link: "/fridges/255-w-27th-st",
     mapUrl: "https://maps.app.goo.gl/wpxKpMb5WSH5YB3P8",
     usage: 40,
-    temp: 35,
+    temp: 30,
     lat: 37.5171385,
     lon: -77.4596732
   },
@@ -148,10 +148,13 @@ const fridges = [
 ];
 
 function App() {
+  const [loading, setLoading] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [sortedFridges, setSortedFridges] = useState(fridges);
 
   const enableLocation = () => {
     if (navigator.geolocation) {
+      setLoading(true);
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation = {
@@ -166,6 +169,7 @@ function App() {
           });
 
           setSortedFridges(sorted);
+          setLoading(false);
         },
         (error) => alert("Location access denied. Unable to sort fridges by distance."),
         { enableHighAccuracy: true }
@@ -188,7 +192,8 @@ function App() {
               width="150"
             />
           </a>
-          <div className="menu">
+          <button className="hamburger" onClick={() => setMenuOpen(prev => !prev)}>&#9776;</button>
+          <div className={`menu ${menuOpen ? "open" : ""}`}>
             <a href="/donate" className="nav-link">Donate</a>
             <a href="/volunteer" className="nav-link">Volunteer</a>
             <a href="/merchandise" className="nav-link">Merchandise</a>
@@ -215,6 +220,12 @@ function App() {
                 </button>
               </div>
             </div>
+            {loading && (
+              <div className="spinner" style={{ textAlign: "center", margin: "20px" }}>
+                <div className="lds-dual-ring"></div>
+                <p className="loading-text">Sorting fridges...</p>
+              </div>
+            )}
             <div className="collection-list-wrapper w-dyn-list">
               <div role="list" className="collection-list-courses w-dyn-items">
                 {sortedFridges.map((fridge) => (
