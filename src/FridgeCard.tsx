@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
+
 interface Props {
     name: string;
     image: string;
-    link: string;
+    id: string;
     mapUrl: string;
     usage: number;
     temp: number;
@@ -11,17 +13,17 @@ interface Props {
     contains?: string;
 }
 
-const getTempColor = (temp: number) => {
-    if (temp >= 40) {
-        return "pink";
-    } else if (temp <= 32) {
-        return "lightblue";
-    } else {
-        return "lightgreen";
+const FridgeCard = ({ name, image, id, mapUrl, temp, usage, contains = "Fridge & Pantry" }: Props) => {    
+    const getTempColor = (temp: number) => {
+        if (temp >= 40) {
+            return "pink";
+        } else if (temp <= 32) {
+            return "lightblue";
+        } else {
+            return "lightgreen";
+        }
     }
-}
 
-const FridgeCard = ({ name, image, link, mapUrl, usage, temp, contains = "Fridge & Pantry"}: Props) => {
     return (
         <div className="collection-item-course w-dyn-item">
             <div className="div-course-card wider w-inline-block">

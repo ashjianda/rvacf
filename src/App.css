@@ -4118,9 +4118,15 @@ blockquote {
   z-index: 1000;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .modal-content {
   background: #fff;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 12px;
   max-width: 400px;
   width: 90%;
@@ -4133,9 +4139,9 @@ blockquote {
   padding: 0.5rem;
   font-size: 1rem;
   margin-bottom: 0.75rem;
-  border: 1px solid #ccc;
+  border: 2px solid var(--dark-slate-blue);
   border-radius: 6px;
-  background-color: var(--azure);
+  background-color: #fff;
   color: var(--dark-slate-blue);
 }
 
@@ -4156,9 +4162,26 @@ blockquote {
   cursor: pointer;
 }
 
-.suggestion-items {
-  display: flex;
-  border-bottom: #000 solid 1px;
+.or-text {
+  text-align: center;
+  color: var(--dark-slate-blue);  
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.suggestion-item:not(:first-child) {
+  border-top: 1px solid var(--dark-slate-blue);
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
 }
 
 .ticket-and-close-icon {
