@@ -252,14 +252,6 @@ function App() {
               width="150"
             />
           </a>
-          <button className="hamburger" onClick={() => setMenuOpen(prev => !prev)}>&#9776;</button>
-          <div className={`menu ${menuOpen ? "open" : ""}`}>
-            <a href="/donate" className="nav-link">Donate</a>
-            <a href="/volunteer" className="nav-link">Volunteer</a>
-            <a href="/merchandise" className="nav-link">Merchandise</a>
-            <a href="/contact" className="nav-link">Contact</a>
-            <a href="/fridges" className="button-2 w-button">Fridges</a>
-          </div>
         </div>
       </nav>
 
