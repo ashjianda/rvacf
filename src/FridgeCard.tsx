@@ -33,15 +33,19 @@ const FridgeCard = ({ name, image, id, mapUrl, temp, usage, contains = "Fridge &
                 </div>
                 <div className="div-course-element-info">
                     <div className="div-chip">{contains}</div>
-                    <a href={mapUrl} className="button-5 w-button">Directions</a>
+                    <a href={mapUrl} className="div-chip-directions">Directions</a>
                 </div>
                 <div className="div-course-element-info">
-                    <div className="div-chip-usage">
-                        Usage: {usage}
-                    </div>
-                    <div className={"div-chip-temp"} style={{backgroundColor:getTempColor(temp)}}>
-                        Temperature: {temp}°F
-                    </div>
+                    {usage > 0 && temp > 0 ? (
+                        <>
+                            <div className="div-chip-usage">
+                                Usage: {usage}
+                            </div>
+                            <div className="div-chip-temp" style={{ backgroundColor: getTempColor(temp) }}>
+                                Temperature: {`${Math.round(temp)}°F`}
+                            </div>
+                        </>
+                    ) : null }
                 </div>
             </div>
         </div>

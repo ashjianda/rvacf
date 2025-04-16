@@ -9,8 +9,6 @@ const fridges = [
     image: "https://cdn.prod.website-files.com/6243808cf3d10807a4f672e4/676c4480954df2bd737f9440_IMG_9A971722DD8F-1.jpeg",
     id: "cary-st-fridge",
     mapUrl: "https://maps.app.goo.gl/WZxC58FaVSp2vJvw7",
-    usage: 40,
-    temp: 60,
     lat: 37.5521239,
     lon: -77.4782909,
     contains: "Fridge",
@@ -90,8 +88,6 @@ const fridges = [
     image: "https://cdn.prod.website-files.com/6243808cf3d10807a4f672e4/64721547ba5ccd13915eb9c1_3A18BC09-E24A-435B-893B-94431A6FF820.JPG",
     id: "oakwood-art-fridge",
     mapUrl: "https://maps.app.goo.gl/yuJDoaPZA32yu3Pe8",
-    usage: 40,
-    temp: 35,
     lat: 37.5319107,
     lon: -77.412651
   },
@@ -100,8 +96,6 @@ const fridges = [
     image: "https://cdn.prod.website-files.com/6243808cf3d10807a4f672e4/64de5606041f3234c6f3ef7e_IMG_4585.JPG",
     id: "fonticello-fridge",
     mapUrl: "https://maps.app.goo.gl/wpxKpMb5WSH5YB3P8",
-    usage: 40,
-    temp: 30,
     lat: 37.5171385,
     lon: -77.4596732
   },
@@ -172,27 +166,27 @@ function App() {
   const [sortedFridges, setSortedFridges] = useState(fridges);
   const [fridgeStats, setFridgeStats] = useState<Map<string, { temp: number; usage: number }>>(new Map());
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch('https://al6mmf5bsd.execute-api.us-east-1.amazonaws.com/prod/api/siteQuery');
-      const json = await res.json();
-      const data = JSON.parse(json.body);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('https://al6mmf5bsd.execute-api.us-east-1.amazonaws.com/prod/api/siteQuery');
+        const json = await res.json();
+        const data = JSON.parse(json.body);
 
-      console.log("Queried!");
-      const map = new Map();
-      data.forEach((entry: { fridge: string, temp: number, usage: number }) => {
-        map.set(entry.fridge, { temp: entry.temp, usage: entry.usage });
-      });
+        console.log("Queried!");
+        const map = new Map();
+        data.forEach((entry: { fridge: string, temp: number, usage: number }) => {
+          map.set(entry.fridge, { temp: entry.temp, usage: entry.usage });
+        });
 
-      setFridgeStats(map);
-    } catch (err) {
-      console.error("Failed to fetch fridge data", err);
-    }
-  };
+        setFridgeStats(map);
+      } catch (err) {
+        console.error("Failed to fetch fridge data", err);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
 
   const sortFridges = (userLocation: { latitude: number; longitude: number }) => {
@@ -338,12 +332,14 @@ useEffect(() => {
               <div role="list" className="collection-list-courses w-dyn-items">
                 {sortedFridges.map((fridge) => {
                   const stats = fridgeStats.get(fridge.id);
+                  const temp = stats?.temp ?? 0;
+                  const usage = stats?.usage ?? 0;
                   return (
                     <FridgeCard
                       key={fridge.id}
                       {...fridge}
-                      temp={stats?.temp ?? fridge.temp}
-                      usage={stats?.usage ?? fridge.usage}
+                      temp={temp}
+                      usage={usage}
                     />
                   );
                 })}

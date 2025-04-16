@@ -3870,6 +3870,11 @@ blockquote {
   margin-bottom: 10px;
   font-family: Oswald, sans-serif;
   font-size: 16px;
+  border-radius: 3px;
+}
+
+.fridge-list {
+  margin-bottom: 20px
 }
 
 .loading-text {
@@ -4770,11 +4775,27 @@ blockquote {
 }
 
 .div-chip {
-  background-color: var(--azure);
+  background-color: var(--dark-slate-blue);
   border-radius: 3px;
   padding: 5px 10px;
   display: flex;
   align-items: center;
+  color: var(--azure);
+}
+
+.div-chip-directions {
+  background-color: var(--dark-slate-blue);
+  border-radius: 3px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--azure);
+}
+
+.div-chip-directions:hover {
+  background-color: var(--azure);
+  color: var(--dark-slate-blue)
 }
 
 .div-chip.right {
@@ -7786,6 +7807,7 @@ blockquote {
     justify-content: space-between;
     flex: 1; 
     min-height: 100%; 
+    box-shadow: 0px 0 0px rgba(0, 0, 0, 0.1);
   }
 
   .section-course-info {
