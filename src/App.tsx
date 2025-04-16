@@ -1,7 +1,7 @@
 import './App.css'
 import FridgeCard from './FridgeCard';
 import { getPreciseDistance } from 'geolib';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const fridges = [
   {
@@ -147,12 +147,31 @@ const fridges = [
   // },
 ];
 
+type SearchResult = {
+  lat: string;
+  lon: string;
+  display_name: string;
+  [key: string]: any;
+};
+
 function App() {
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [locationModal, setLocationModal] = useState(false);
+  const [address, setAddress] = useState("");
+  const [addressCompleteList, setAddressComplete] = useState<SearchResult[]>([]);
   const [sortedFridges, setSortedFridges] = useState(fridges);
 
-  const enableLocation = () => {
+  const sortFridges = (userLocation: { latitude: number; longitude: number }) => {
+    const sorted = [...fridges].sort((a, b) => {
+      const distA = getPreciseDistance(userLocation, { latitude: a.lat, longitude: a.lon }, 0.1);
+      const distB = getPreciseDistance(userLocation, { latitude: b.lat, longitude: b.lon }, 0.1);
+      return distA - distB;
+    });
+    setSortedFridges(sorted);
+  };
+
+  const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       setLoading(true);
       navigator.geolocation.getCurrentPosition(
@@ -162,22 +181,63 @@ function App() {
             longitude: position.coords.longitude,
           };
 
-          const sorted = [...fridges].sort((a, b) => {
-            const distA = getPreciseDistance(userLocation, { latitude: a.lat, longitude: a.lon }, 0.1);
-            const distB = getPreciseDistance(userLocation, { latitude: b.lat, longitude: b.lon }, 0.1);
-            return distA - distB;
-          });
-
-          setSortedFridges(sorted);
+          sortFridges(userLocation);
+          setLocationModal(false);
           setLoading(false);
         },
-        (error) => alert("Location access denied. Unable to sort fridges by distance."),
+        () => alert("Location access denied. Unable to sort fridges by distance."),
         { enableHighAccuracy: true }
       );
     } else {
       alert("Geolocation is not supported by your browser.");
     }
   };
+
+  const handleAddress = (option: SearchResult) => {
+    const userLocation = {
+      latitude: parseFloat(option.lat),
+      longitude: parseFloat(option.lon),
+    };
+
+    setAddress(option.display_name);
+    setAddressComplete([]);
+    sortFridges(userLocation);
+    setLocationModal(false);
+  };
+
+  const handleAddressInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAddress(value);
+  
+    if (value.length < 2) {
+      setAddressComplete([]);
+    }
+  };
+  
+
+  useEffect(() => {
+    if (!address.trim()) return;
+  
+    const timeoutId = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Virginia, USA')}&addressdetails=1`);
+        const data = await res.json();
+  
+        const formattedData = data.map((result: any) => {
+          const a = result.address;
+          const formattedAddress = a.house_number + ' ' + a.road + ', ' + (a.town || a.city || a.village || a.hamlet) + ', ' + a.state + ' ' + a.postcode;
+          return { ...result, formattedAddress };
+        });
+        console.log(formattedData);
+        setAddressComplete(formattedData);
+      } catch (err) {
+        console.error('Fetch failed:', err);
+      }
+    }, 500); // debounce time
+  
+    return () => clearTimeout(timeoutId);
+  }, [address]);
+  
 
   return (
     <>
@@ -203,6 +263,30 @@ function App() {
         </div>
       </nav>
 
+
+      {locationModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Enter Your Address</h3>
+            <input type="text" placeholder="Enter your address" value={address} onChange={handleAddressInput} className="modal-input" />
+            {addressCompleteList.length > 0 && (
+              <div className="suggestions-list">
+              {addressCompleteList.map((a, i) => (
+                <div key={i} className="suggestion-item" onClick={() => handleAddress(a)}>
+                  {a.formattedAddress}
+                </div>
+              ))}
+            </div>
+            
+            )}
+            <div className="modal-buttons">
+              <button onClick={handleCurrentLocation}>Use My Current Location</button>
+              <button onClick={() => setLocationModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Fridge List */} 
       <section className="fridge-list" style={{ display: "flex", justifyContent: "center" }}>
         <div>
@@ -215,7 +299,7 @@ function App() {
                 <button onClick={() => window.open("https://opencollective.com/rva-community-fridges/donate", "_blank")} className="fridge-button">
                   Donate
                 </button>
-                <button onClick={enableLocation} className="fridge-button">
+                <button onClick={() => setLocationModal(true)} className="fridge-button">
                   Enable Locations
                 </button>
               </div>
