@@ -256,7 +256,6 @@ function App() {
       try {
         const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ", Virginia")}&addressdetails=1&limit=5`);
         const data = await res.json();
-        console.log("Raw Data", data);
   
         const virginiaOnly = data.filter((result: any) => {
           const state = result.address?.state?.toLowerCase();
@@ -282,8 +281,6 @@ function App() {
             formattedData.push({ ...result, formattedAddress });
           }
         }
-  
-        console.log("Filtered & Deduped Results:", formattedData);
         setAddressComplete(formattedData);
       } catch (err) {
         console.error('Fetch failed:', err);

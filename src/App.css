@@ -4209,10 +4209,12 @@ blockquote {
 
 .nav-bar {
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   flex-direction: column; 
   width: 100%;
+  z-index: 1;
 }
 
 .footer {
@@ -7320,6 +7322,7 @@ blockquote {
     justify-content: flex-start;
     align-items: center;
     width: auto;
+    position: relative;
   }
 
   .footer {
