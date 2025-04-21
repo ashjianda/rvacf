@@ -200,6 +200,7 @@ function App() {
 
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
+      setLocationModal(false);
       setLoading(true);
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -207,9 +208,7 @@ function App() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           };
-
           sortFridges(userLocation);
-          setLocationModal(false);
           setLoading(false);
         },
         () => alert("Location access denied. Unable to sort fridges by distance."),
@@ -221,22 +220,30 @@ function App() {
   };
 
   const handleAddress = (option: SearchResult) => {
+    setLocationModal(false);
+    setLoading(true);
+  
     const userLocation = {
       latitude: parseFloat(option.lat),
       longitude: parseFloat(option.lon),
     };
-
+  
     setAddress(option.display_name);
     setAddressComplete([]);
+  
     sortFridges(userLocation);
-    setLocationModal(false);
+  
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
+  
 
   const handleAddressInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    
     setAddress(value);
-  
-    if (value.length < 2) {
+    if (value.length <= 2) {
       setAddressComplete([]);
     }
   };
@@ -247,20 +254,41 @@ function App() {
   
     const timeoutId = setTimeout(async () => {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Virginia, USA')}&addressdetails=1&limit=5`);
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ", Virginia")}&addressdetails=1&limit=5`);
         const data = await res.json();
+        console.log("Raw Data", data);
   
-        const formattedData = data.map((result: any) => {
-          const a = result.address;
-          const formattedAddress = a.house_number + ' ' + a.road + ', ' + (a.town || a.city || a.village || a.hamlet) + ', ' + a.state + ' ' + a.postcode;
-          return { ...result, formattedAddress };
+        const virginiaOnly = data.filter((result: any) => {
+          const state = result.address?.state?.toLowerCase();
+          return state === 'virginia';
         });
-        console.log("Address");
+
+        const seen = new Set();
+        const formattedData = [];
+  
+        for (const result of virginiaOnly) {
+          const a = result.address;
+  
+          const parts = [
+            [a.house_number, a.road].filter(Boolean).join(' '),
+            a.town || a.city || a.village || a.hamlet,
+            [a.state, a.postcode].filter(Boolean).join(' ')
+          ];
+  
+          const formattedAddress = parts.filter(Boolean).join(', ');
+  
+          if (!seen.has(formattedAddress)) {
+            seen.add(formattedAddress);
+            formattedData.push({ ...result, formattedAddress });
+          }
+        }
+  
+        console.log("Filtered & Deduped Results:", formattedData);
         setAddressComplete(formattedData);
       } catch (err) {
         console.error('Fetch failed:', err);
       }
-    }, 500); // debounce time
+    }, 500);
   
     return () => clearTimeout(timeoutId);
   }, [address]);
@@ -311,7 +339,7 @@ function App() {
           <div className="w-container">
             <div className="fridges-heading-wrapper">
               <div className="fridges-heading left-aligned">
-                Full list of fridges
+                List of fridges
               </div>
               <div className="fridges-button-group">
                 <button onClick={() => window.open("https://opencollective.com/rva-community-fridges/donate", "_blank")} className="fridge-button">
@@ -323,8 +351,7 @@ function App() {
               </div>
             </div>
             {loading && (
-              <div className="spinner" style={{ textAlign: "center", margin: "20px" }}>
-                <div className="lds-dual-ring"></div>
+              <div className="loading-overlay">
                 <p className="loading-text">Sorting fridges...</p>
               </div>
             )}
