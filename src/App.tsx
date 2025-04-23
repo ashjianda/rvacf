@@ -5,6 +5,15 @@ import { useState, useEffect } from 'react';
 
 const fridges = [
   {
+    name: "Capstone Expo",
+    image: "",
+    id: "expo-fridge",
+    mapUrl: "https://maps.app.goo.gl/L5P2QGfWoCYLhJY4A",
+    lat: 37.5529069,
+    lon: -77.4554984,
+    contains: "fridge",
+  },
+  {
     name: "2913 W Cary Street",
     image: "https://cdn.prod.website-files.com/6243808cf3d10807a4f672e4/676c4480954df2bd737f9440_IMG_9A971722DD8F-1.jpeg",
     id: "cary-st-fridge",
