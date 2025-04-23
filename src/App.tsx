@@ -11,7 +11,7 @@ const fridges = [
     mapUrl: "https://maps.app.goo.gl/L5P2QGfWoCYLhJY4A",
     lat: 37.5529069,
     lon: -77.4554984,
-    contains: "fridge",
+    contains: "Fridge",
   },
   {
     name: "2913 W Cary Street",
