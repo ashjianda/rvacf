@@ -15,7 +15,7 @@ interface Props {
 
 const FridgeCard = ({ name, image, id, mapUrl, temp, usage, contains = "Fridge & Pantry" }: Props) => {    
     const getTempColor = (temp: number) => {
-        if (temp >= 40) {
+        if (temp >= 45) {
             return "pink";
         } else if (temp <= 32) {
             return "lightblue";
@@ -36,7 +36,7 @@ const FridgeCard = ({ name, image, id, mapUrl, temp, usage, contains = "Fridge &
                     <a href={mapUrl} className="div-chip-directions">Directions</a>
                 </div>
                 <div className="div-course-element-info">
-                    {usage > 0 && temp > 0 ? (
+                    {usage > 0 || temp > 0 ? (
                         <>
                             <div className="div-chip-usage">
                                 Usage: {usage}

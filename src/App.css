@@ -5266,7 +5266,7 @@ blockquote {
 
 .div-course-card {
   border: 1px solid #cacaca;
-  width: 300px;
+  width: 400px;
   padding-bottom: 30px;
   display: flex;
   flex-direction: column;
@@ -5276,7 +5276,7 @@ blockquote {
 .div-course-card.wider {
   color: #333;
   border-radius: 10px;
-  width: 350px;
+  width: 400px;
   margin-bottom: 10px;
   padding-bottom: 10px;
   text-decoration: none;
@@ -5295,10 +5295,10 @@ blockquote {
 }
 
 .collection-list-courses {
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
+  grid-column-gap: 75px;
+  grid-row-gap: 32px;
   grid-template-rows: auto;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
   grid-auto-flow: row;
   justify-content: stretch;
@@ -5763,8 +5763,8 @@ blockquote {
 .image-193 {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  max-height: 450px;
-  height: 450px;
+  max-height: 500px;
+  height: 500px;
   object-fit: cover;
 }
 
