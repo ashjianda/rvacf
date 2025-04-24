@@ -192,13 +192,14 @@ function App() {
         const json = await res.json();
         const data = JSON.parse(json.body);
 
-        console.log("Queried!");
+        console.log(data);
         const map = new Map();
         data.forEach((entry: { fridge: string, temp: number, usage: number }) => {
           map.set(entry.fridge, { temp: entry.temp, usage: entry.usage });
         });
 
         setFridgeStats(map);
+        console.log(map);
       } catch (err) {
         console.error("Failed to fetch fridge data", err);
       }
@@ -375,8 +376,8 @@ function App() {
               <div role="list" className="collection-list-courses w-dyn-items">
                 {sortedFridges.map((fridge) => {
                   const stats = fridgeStats.get(fridge.id);
-                  const temp = stats?.temp ?? 0;
-                  const usage = stats?.usage ?? 0;
+                  const temp = stats?.temp ?? -1;
+                  const usage = stats?.usage ?? -1;
                   return (
                     <FridgeCard
                       key={fridge.id}
